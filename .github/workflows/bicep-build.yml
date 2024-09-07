@@ -30,7 +30,7 @@ jobs:
 
     # Upload the output ARM JSON file as an artifact (optional)
     - name: Upload ARM template
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: arm-template
         path: './bicep/template.json'
