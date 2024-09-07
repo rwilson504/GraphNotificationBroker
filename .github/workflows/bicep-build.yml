@@ -23,7 +23,8 @@ jobs:
       uses: Azure/bicep-build-action@v1.0.0
       with:
         # Specify the directory where the Bicep files are located (use '.' for root)
-        filePath: './bicep/main.bicep'
+        bicepFilePath: './bicep/main.bicep'
+        outputFilePath: './bicep/azuredeploy.json'
 
     # Upload the output ARM JSON file as an artifact (optional)
     - name: Upload ARM template
