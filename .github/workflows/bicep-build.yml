@@ -1,0 +1,33 @@
+name: Bicep Build
+
+on:
+  # Trigger the workflow on push to the main branch or pull requests
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checkout the code
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Use the Bicep Build Action to convert the Bicep files to ARM JSON templates
+    - name: Build Bicep files
+      uses: Azure/bicep-build-action@v1
+      with:
+        # Specify the directory where the Bicep files are located (use '.' for root)
+        filePath: './bicep/main.bicep'
+
+    # Upload the output ARM JSON file as an artifact (optional)
+    - name: Upload ARM template
+      uses: actions/upload-artifact@v3
+      with:
+        name: arm-template
+        path: './bicep/template.json'
