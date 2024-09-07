@@ -20,7 +20,7 @@ jobs:
 
     # Use the Bicep Build Action to convert the Bicep files to ARM JSON templates
     - name: Build Bicep files
-      uses: Azure/bicep-build-action@v1
+      uses: Azure/bicep-build-action@v1.0.0
       with:
         # Specify the directory where the Bicep files are located (use '.' for root)
         filePath: './bicep/main.bicep'
