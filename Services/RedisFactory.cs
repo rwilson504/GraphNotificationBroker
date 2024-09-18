@@ -4,8 +4,6 @@ using GraphNotifications.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using System;
-using System.Threading;
 
 namespace GraphNotifications.Services
 {
@@ -94,7 +92,7 @@ namespace GraphNotifications.Services
             var previousReconnect = new DateTimeOffset(previousTicks, TimeSpan.Zero);
             var elapsedSinceLastReconnect = utcNow - previousReconnect;
 
-            // If mulitple threads call ForceReconnect at the same time, we only want to honor one of them.
+            // If multiple threads call ForceReconnect at the same time, we only want to honor one of them.
             if (elapsedSinceLastReconnect > ReconnectMinFrequency)
             {
                 lock (reconnectLock)
