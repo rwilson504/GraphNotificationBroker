@@ -1,6 +1,8 @@
 @description('The name of the function app that you wish to create.')
 param name string
 param certificateName string
+param authUrl string
+param graphUrl string
 
 @description('The language worker runtime to load in the function app.')
 @allowed([
@@ -88,12 +90,20 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
           value: '@Microsoft.KeyVault(VaultName=${name}kv;SecretName=AzureSignalRConnectionString)'
         }
         {
+          name: 'AppSettings:GraphUrl'
+          value: graphUrl
+        }
+        {
+          name: 'AppSettings:AuthUrl'
+          value: authUrl
+        }
+        {
           name: 'AppSettings:TenantId'
           value: 'common' // common is for multitenant apps, otherwise use: subscription().tenantId
         }
         {
           name: 'AppSettings:NotificationUrl'
-          value: 'EventHub:https://${name}kv.vault.azure.net/secrets/GraphEventHubSendConnectionString?tenantId=${subscription().tenantId}'
+          value: 'EventHub:https://${name}kv${environment().suffixes.keyvaultDns}/secrets/GraphEventHubSendConnectionString?tenantId=${subscription().tenantId}'
         }
         {
           name: 'AppSettings:ClientId'
@@ -105,7 +115,7 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
         }
         {
           name: 'AppSettings:KeyVaultUrl'
-          value: 'https://${name}kv.vault.azure.net'
+          value: 'https://${name}kv${environment().suffixes.keyvaultDns}'
         }
         {
           name: 'AppSettings:CertificateName'

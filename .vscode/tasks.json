@@ -66,11 +66,11 @@
 			"problemMatcher": "$func-dotnet-watch"
 		},
 		{
-            "label": "Terminate All Tasks",
-            "command": "echo ${input:terminate}",
-            "type": "shell",
-            "problemMatcher": []
-        }
+			"label": "Terminate All Tasks",
+			"command": "echo ${input:terminate}",
+			"type": "shell",
+			"problemMatcher": []
+		}
 	],
 	"inputs": [
         {

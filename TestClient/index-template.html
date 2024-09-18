@@ -91,13 +91,10 @@
     crossorigin="anonymous"></script>
 
   <!-- MSAL -->
-  <script type="text/javascript"
-          src="https://alcdn.msauth.net/browser/2.3.0/js/msal-browser.min.js"
-          integrity="sha384-o+Sncs5XJ3NEAeriM/FV8YGZrh7mZk4GfNutRTbYjsDNJxb7caCLeqiDabistgwW"
-          crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
-
+  <!-- SignalR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.js" integrity="sha512-FzakzcmrNSXS5+DuuYSO6+5DcUZ417Na0vH1oAIo49mMBA8rHSgkKSjE2ALFOxdQ/kPqF3HZRzb0HQ+AvwXttg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     
     const signalRMethodCreateSubscription = "CreateSubscription";
@@ -109,7 +106,7 @@
     //section Config.js
     const appsettings = {
       clientId: '__FRONTEND_CLIENT_ID__',
-      authority: 'https://login.microsoftonline.com/common',
+      authority: '__AUTHORITY_URI__/common',
       scopes: [ '__BACKEND_CLIENT_ID__/.default' ],
       renewalThreshold : 60,    //The number of seconds before subscription expires it will be renewed 
       timerInterval : 1,        //The number of seconds the timer will check on expiration

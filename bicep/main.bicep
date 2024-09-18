@@ -6,6 +6,8 @@ param apiClientId string
 @secure()
 param apiClientSecret string
 param corsUrls array
+param authUrl string
+param graphUrl string
 param certificateName string = 'contoso'
 
 module redis 'redis.bicep' = {
@@ -87,6 +89,8 @@ module functionApp 'appServiceFunction.bicep' = {
     name: appName
     certificateName: certificateName
     allowedOrigins: corsUrls
+    authUrl: authUrl
+    graphUrl: graphUrl
   }
   dependsOn: [
     storageAccount

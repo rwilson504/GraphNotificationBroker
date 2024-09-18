@@ -5,7 +5,9 @@ param (
     [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
     [string] $BackendClientId,
     [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
-    [string] $RedirectUri
+    [string] $RedirectUri,
+    [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+    [string] $AuthorityUri
 )
 try
 {
@@ -13,6 +15,7 @@ try
     $frontEndToken = "__FRONTEND_CLIENT_ID__"
     $backendToken = "__BACKEND_CLIENT_ID__"
     $functionAppHostToken = "__FUNCTION_APP_HOST__"
+    $authorityUriToken = "__AUTHORITY_URI__"
 
     $content = Get-Content -Path './TestClient/index-template.html'
     
@@ -22,6 +25,8 @@ try
     $content = $content -replace $backendToken, $BackendClientId
     Write-Host "Replacing $($functionAppHostToken) token with $($RedirectUri)"
     $content = $content -replace $functionAppHostToken, $RedirectUri
+    Write-Host "Replacing $($authorityUriToken) token with $($AuthorityUri)"
+    $content = $content -replace $authorityUriToken, $AuthorityUri
 
     $content | Out-File './TestClient/index.html'
 }

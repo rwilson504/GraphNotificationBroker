@@ -29,6 +29,9 @@ param skuName string = 'standard'
 
 var keyVaultName = '${name}kv'
 
+// Determine the DNS suffix based on the environment
+var redisDnsSuffix = environment().name == 'AzureUSGovernment' ? '.redis.cache.usgovcloudapi.net' : '.redis.cache.windows.net'                     
+
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-11-01' = {
   name: '${name}ns'
   location: resourceGroup().location
@@ -117,6 +120,6 @@ resource redisConnectionString 'Microsoft.KeyVault/vaults/secrets@2021-11-01-pre
   parent: kv
   name: 'RedisConnectionString'
   properties: {
-    value: '${redis.name}.redis.cache.windows.net:6380,password=${redis.listKeys().primaryKey},ssl=True,abortConnect=False'
+    value: '${redis.name}${redisDnsSuffix}:6380,password=${redis.listKeys().primaryKey},ssl=True,abortConnect=False'
   }
 }

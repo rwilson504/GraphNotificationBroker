@@ -6,25 +6,37 @@ param (
     [Parameter(Mandatory=$true)]
     [string] $ApplicationName,
     [string] $AccessToken,
+    [string] $Environment,
+    [string] $AuthorityUri,
     [string[]] $SpaRedirectUris,
     [string[]] $WebRedirectUris,
     [string[]] $CorsUrls
 )
 try
 {
-    $FuncAppRedirectUri = "https://$($ApplicationName)func.azurewebsites.net"
+    # Define the domain suffix based on the environment
+    $domainSuffix = ".net"
+
+    # Check if the environment is USGov or USGovDoD, set the domain suffix to .us
+    if ($Environment -eq "USGov" -or $Environment -eq "USGovDoD") {
+        $domainSuffix = ".us"
+    }
+
+    $FuncAppRedirectUri = "https://$($ApplicationName)func.azurewebsites$domainSuffix"
     $SpaRedirectUris += $FuncAppRedirectUri
 
-    $CorsUrls += $FuncAppRedirectUri
+    $CorsUrls += $FuncAppRedirectUri    
 
     Write-Host "Connecting to Graph"
     if ($token) {
-        $c = Connect-MgGraph -AccessToken $token
+        $c = Connect-MgGraph -AccessToken $token -Environment $Environment
     }
     else {
         # If running as a user not in a container you can use this command
-        $c = Connect-MgGraph -Scopes "Application.ReadWrite.All", "User.ReadBasic.All"
+        $c = Connect-MgGraph -Scopes "Application.ReadWrite.All", "User.ReadBasic.All" -Environment $Environment
     }
+
+    $graphEnvironment = Get-MgEnvironment -Name $Environment
 
     $frontendApplication = Get-MgApplication -Filter "DisplayName eq '$($ApplicationName) Frontend'"
     if (!$frontendApplication) {
@@ -147,6 +159,12 @@ try
             'corsUrls' = @{
                 'value' = $CorsUrls
             }
+            'authUrl' = @{
+                'value' = $graphEnvironment.AzureADEndpoint
+            }
+            'graphUrl' = @{
+                'value' = $graphEnvironment.GraphEndpoint
+            }
         }
     }
 
@@ -161,6 +179,8 @@ try
         FrontendClientId = $frontendApplication.AppId
         BackendClientId = $backendApplication.AppId
         RedirectUri = $FuncAppRedirectUri
+        AuthorityUri = $graphEnvironment.AzureADEndpoint.TrimEnd("/")
+        GraphUri= $graphEnvironment.GraphEndpoint
     }
 }
 catch

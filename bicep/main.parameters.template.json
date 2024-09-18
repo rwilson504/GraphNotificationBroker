@@ -16,6 +16,12 @@
     },
     "apiClientSecret": {
       "value": ""
+    },
+    "authUrl": {
+      "value": ""
+    },
+    "graphUrl": {
+      "value": ""
     }
   }
 }

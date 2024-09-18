@@ -5,6 +5,8 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureSignalRConnectionString": "",
     "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "AppSettings:AuthUrl": "https://login.microsoftonline.com/",
+    "AppSettings:GraphUrl": "https://graph.microsoft.com/",
     "AppSettings:TenantId": "common",
     "AppSettings:NotificationUrl": "EventHub:https://<keyVaultName>.vault.azure.net/secrets/<keyVaultSecretName>?tenantId=<domain>.onmicrosoft.com", // or if using WebHooks "https://<yourdomain>/api/notify",
     "AppSettings:ClientSecret": "",
