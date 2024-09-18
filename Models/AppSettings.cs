@@ -2,6 +2,10 @@
 {
     public class AppSettings
     {
+        public string GraphUrl { get; set; }
+
+        public string AuthUrl { get; set; }
+
         public string TenantId { get; set; }
         
         public string NotificationUrl { get; set; }

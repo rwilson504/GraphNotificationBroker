@@ -6,6 +6,7 @@ using GraphNotifications.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
+//using System.Threading;
 
 namespace GraphNotifications.Services
 {
@@ -25,6 +26,12 @@ namespace GraphNotifications.Services
             var tenantId = _settings.TenantId;
             var clientId = _settings.ClientId;
             var clientSecret = _settings.ClientSecret;
+            var authorityUrl = string.IsNullOrEmpty(_settings.AuthUrl) 
+                    ? new Uri($"{AzureAuthorityHosts.AzurePublicCloud.ToString().TrimEnd('/')}/{tenantId}")
+                    : new Uri($"{_settings.AuthUrl.TrimEnd('/')}/{tenantId}");
+            var graphUrl = string.IsNullOrEmpty(_settings.GraphUrl) 
+                    ? "https://graph.microsoft.com" 
+                    : _settings.GraphUrl;
 
             if (string.IsNullOrEmpty(tenantId) ||
                 string.IsNullOrEmpty(clientId) ||
@@ -33,11 +40,19 @@ namespace GraphNotifications.Services
                 _logger.LogError("Required settings missing: 'tenantId', 'apiClientId', and 'apiClientSecret'.");
                 throw new ArgumentNullException("Required settings missing: 'tenantId', 'apiClientId', and 'apiClientSecret'.");
             }
+            
+            var onBehlfofCredentialOptions = new OnBehalfOfCredentialOptions
+                { AuthorityHost = authorityUrl };
 
             var onBehalfOfCredential = new OnBehalfOfCredential(
-                tenantId, clientId, clientSecret, userAssertion);
+                tenantId, clientId, clientSecret, userAssertion, onBehlfofCredentialOptions);                      
 
-            return new GraphServiceClient(onBehalfOfCredential);
+            IEnumerable<string> scopes = new List<string> { $"{graphUrl.TrimEnd('/')}/.default" };  // Replace with your custom scope
+
+            _logger.LogInformation("Returning GraphServiceClient");
+            var graphClient= new GraphServiceClient(onBehalfOfCredential, scopes); 
+            graphClient.BaseUrl = $"{graphUrl.TrimEnd('/')}/v1.0";
+            return graphClient;
         }
     }
 }

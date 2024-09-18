@@ -12,6 +12,10 @@ using Microsoft.Extensions.Options;
 using Azure.Messaging.EventHubs;
 using System.Text;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System;
+using System.Net.Http;
+using System.IO;
 
 namespace GraphNotifications.Functions
 {
@@ -179,7 +183,7 @@ namespace GraphNotifications.Functions
             }
             catch(Exception ex)
             {
-                 _logger.LogError(ex, "Encountered an error when creating a subscription");
+                 _logger.LogError(ex, "Encountered an error when creating a subscription");                 
                  await Clients.Client(invocationContext.ConnectionId).SendAsync("SubscriptionCreationFailed", subscriptionDefinition);
             }
         }

@@ -69,9 +69,14 @@ namespace GraphNotifications.Services
                 var tenantId = _settings.TenantId;
                 var clientId = _settings.ClientId;
                 var clientSecret = _settings.ClientSecret;
+                var authorityUrl = string.IsNullOrEmpty(_settings.AuthUrl)
+                    ? new Uri($"{AzureAuthorityHosts.AzurePublicCloud.ToString().TrimEnd('/')}/{tenantId}")
+                    : new Uri($"{_settings.AuthUrl.TrimEnd('/')}/{tenantId}");
+
+                var clientSecretCredentialOptions = new ClientSecretCredentialOptions { AuthorityHost = authorityUrl };
 
                 // Authenticate as the app to connect to Azure Key Vault
-                return new ClientSecretCredential(tenantId, clientId, clientSecret);
+                return new ClientSecretCredential(tenantId, clientId, clientSecret, clientSecretCredentialOptions);
             }
 
             // If using user assigned managed identity

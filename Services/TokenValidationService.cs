@@ -100,6 +100,10 @@ namespace GraphNotifications.Services
                 // Get tenant ID and client ID
                 var tenantId = _settings.TenantId;
                 var clientId = _settings.ClientId;
+                var authUri= string.IsNullOrEmpty(_settings.AuthUrl) 
+                    ? "https://login.microsoftonline.com" 
+                    : _settings.AuthUrl.TrimEnd('/');
+                    
                 if (string.IsNullOrEmpty(tenantId) ||
                     string.IsNullOrEmpty(clientId))
                 {
@@ -109,7 +113,7 @@ namespace GraphNotifications.Services
 
                 // Load the tenant-specific OpenID config from Azure
                 var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-                $"https://login.microsoftonline.com/{tenantId}/.well-known/openid-configuration",
+                $"{authUri}/{tenantId}/.well-known/openid-configuration",
                 new OpenIdConnectConfigurationRetriever());
 
                 var config = await configManager.GetConfigurationAsync();
