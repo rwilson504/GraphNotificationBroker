@@ -14,9 +14,10 @@ or [GitHub CodeSpace](https://github.com/features/codespaces) for the easiest ex
 
 1. The script will prompt you for a unique ApplicationName and a Resource Group Name
     * Example: `./deploy.ps1 -ApplicationName gnbdemo -ResourceGroupName gnbdemo Location eastus2`
-    * Optional Parameters: You can add any of these optional parameters when executing the deploy.ps1 script. TenantId and SubscriptionId are used during the sign in process to choose the correct tenant and subscription if you have access to multiple.
-        - TenantId
-        - SubscriptionId
+    * Optional Parameters: You can add any of these optional parameters when executing the deploy.ps1 script. TenantId and SubscriptionId are used during the sign in process to choose the correct tenant and subscription if you have access to multiple. The Environment parameter is used to specify the Azure cloud environment, which determines the authentication endpoints and service URLs to use.
+        * TenantId
+        * SubscriptionId
+        * Environment: Defines the Azure environment for deployment. Options include `Global` for the public Azure cloud, `USGov` for Azure Government, and `USGovDoD` for the U.S. Department of Defense environment. If left blank, the environment defaults to `Global`.
 
 ## What does the deployment do?
 
